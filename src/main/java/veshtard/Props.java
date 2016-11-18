@@ -22,6 +22,10 @@ public class Props {
         return prop.getProperty(nameOfProp);
     }
 
+    public String getBrowser() {
+        return loadProperty("browser");
+    }
+
     public String getTutUrl() {
         return loadProperty("tutUrl");
     }

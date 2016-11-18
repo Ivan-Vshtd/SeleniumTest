@@ -1,22 +1,14 @@
 package test.veshtardtests;
 
-
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
-
 import static org.testng.Assert.*;
-
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import veshtard.Props;
 import veshtard.task1.*;
+import veshtard.webtestbase.WebDriverFactory;
 
 public class Task1 {
     private static final Logger log = Logger.getLogger(Task1.class);
-    private WebDriver driver;
     private Props prop;
     private StringBuffer verificationErrors = new StringBuffer();
 
@@ -26,32 +18,19 @@ public class Task1 {
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception {
+        WebDriverFactory.startBrowser();
         prop = new Props();
+        WebDriverFactory.getDriver().get(prop.getTutUrl());
     }
 
     @Test
-    public void testFF() throws Exception {
-        driver = new FirefoxDriver();
+    public void test1() throws Exception {
 
-        log.info("Start testFF,Task1");
-        doIt();
-    }
-
-    @Test
-    public void testChrome() throws Exception {
-        System.setProperty(prop.getPropDriver(), prop.getDriverPath());
-        driver = new ChromeDriver();
-        log.info("Start testChrome,Task1");
-        doIt();
-    }
-
-    private void doIt() throws Exception {
+        log.info("Start test,Task1");
         try {
-            driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
-            driver.get(prop.getTutUrl());
 
-            MainPage mainPage = new MainPage(driver);
-            SearchPage searchPage = new SearchPage(driver);
+            MainPage mainPage = new MainPage(WebDriverFactory.getDriver());
+            SearchPage searchPage = new SearchPage(WebDriverFactory.getDriver());
 
             log.info("Search field definition");
             mainPage.checkSerchLine();
@@ -66,7 +45,7 @@ public class Task1 {
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() throws Exception {
-        driver.quit();
+        WebDriverFactory.stopBrowser();
         String verificationErrorString = verificationErrors.toString();
         if (!"".equals(verificationErrorString)) {
             fail(verificationErrorString);

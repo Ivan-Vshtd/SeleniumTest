@@ -1,15 +1,12 @@
 package test.veshtardtests;
 
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import veshtard.Props;
 import veshtard.task3.*;
+import veshtard.webtestbase.WebDriverFactory;
 
 public class Task3 {
     private static final Logger log = Logger.getLogger(Task3.class);
@@ -19,33 +16,21 @@ public class Task3 {
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception {
-
+        WebDriverFactory.startBrowser();
         prop = new Props();
+        WebDriverFactory.getDriver().get(prop.getDeltaUrl());
     }
 
     @Test
-    public void testFF() throws Exception {
-        driver = new FirefoxDriver();
-        log.info("Start testFF,Task3");
-        doIt();
-    }
-    @Test
-    public void testChrome() throws Exception {
-        System.setProperty(prop.getPropDriver(), prop.getDriverPath());
-        driver = new ChromeDriver();
-        log.info("Start testChrome,Task3");
-        doIt();
-    }
-    private void doIt() throws Exception
-    {
+    public void test() throws Exception {
+
+        log.info("Start test,Task3");
         try {
-            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-            driver.get(prop.getDeltaUrl());
-            MainPage mainPage = new MainPage(driver);
-            TicketSelectionPage ticketSelectionPage = new TicketSelectionPage(driver);
-            PassangerInfoPage passangerInfoPage = new PassangerInfoPage(driver);
-            InfoPage infoPage = new InfoPage(driver);
-            TicketSubmitPage ticketSubmitPage = new TicketSubmitPage(driver);
+            MainPage mainPage = new MainPage(WebDriverFactory.getDriver());
+            TicketSelectionPage ticketSelectionPage = new TicketSelectionPage(WebDriverFactory.getDriver());
+            PassangerInfoPage passangerInfoPage = new PassangerInfoPage(WebDriverFactory.getDriver());
+            InfoPage infoPage = new InfoPage(WebDriverFactory.getDriver());
+            TicketSubmitPage ticketSubmitPage = new TicketSubmitPage(WebDriverFactory.getDriver());
 
             log.info("Enter flight information");
             mainPage.checkBookATrip();
@@ -92,7 +77,7 @@ public class Task3 {
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() throws Exception {
-        driver.quit();
+        WebDriverFactory.stopBrowser();
         String verificationErrorString = verificationErrors.toString();
         if (!"".equals(verificationErrorString)) {
             fail(verificationErrorString);
