@@ -12,18 +12,18 @@ public class MyFTPConnection {
     private static final Logger log = Logger.getLogger(MyFTPConnection.class);
 
     public static void main(String[] args) throws IOException {
-        MySimpleFTP simpleFTP = new MySimpleFTP();
+        MySimpleFTPClient simpleFTPClient = new MySimpleFTPClient();
 
         try {
             log.debug(String.format("Sign in with %s, %s",logIn,password));
-            simpleFTP.connect(host);
-            simpleFTP.login(logIn, password);
-            serfDirectories(simpleFTP);
+            simpleFTPClient.connect(host);
+            simpleFTPClient.login(logIn, password);
+            serfDirectories(simpleFTPClient);
             log.debug("Making directory "+directory);
-            if (simpleFTP.makeDirectory(directory)) {
+            if (simpleFTPClient.makeDirectory(directory)) {
                 log.info("Successfully created directory: " + directory);
                 log.debug("Removing directory "+directory);
-                if (simpleFTP.removeDirectory(directory)) {
+                if (simpleFTPClient.removeDirectory(directory)) {
                     System.out.println("Directory successfully removed!");
                 }
             }
@@ -31,7 +31,7 @@ public class MyFTPConnection {
             log.error(e.getMessage());
         } finally {
             try {
-                simpleFTP.disconnect();
+                simpleFTPClient.disconnect();
                 log.info("Logout from FTP server...");
             } catch (IOException e) {
                 log.error(e.getMessage());
@@ -39,7 +39,7 @@ public class MyFTPConnection {
         }
     }
 
-    private static void serfDirectories(MySimpleFTP simpleFTP) throws IOException {
+    private static void serfDirectories(MySimpleFTPClient simpleFTP) throws IOException {
         String[] files = simpleFTP.listNames();
         printNames(files);
 
