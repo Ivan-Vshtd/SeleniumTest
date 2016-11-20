@@ -22,7 +22,7 @@ public class Task3 {
     }
 
     @Test
-    public void test() throws Exception {
+    public void test3() throws Exception {
 
         log.info("Start test,Task3");
         try {
