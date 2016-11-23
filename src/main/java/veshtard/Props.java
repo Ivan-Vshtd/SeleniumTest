@@ -16,7 +16,7 @@ public class Props {
             prop.load(fileInputStream);
 
         } catch (IOException e) {
-            System.out.println("Ошибка в программе: файл " + PATH_TO_PROPERTIES + " не обнаружен");
+            System.out.println("Error, file is not exist: " + PATH_TO_PROPERTIES);
             e.printStackTrace();
         }
         return prop.getProperty(nameOfProp);
